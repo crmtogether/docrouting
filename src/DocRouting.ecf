@@ -1,0 +1,5 @@
+Description=Document Routing from crmtogether.com
+Directory=DocRouting
+multipleinstalls=y
+errorhandling=strict
+Version=2018
