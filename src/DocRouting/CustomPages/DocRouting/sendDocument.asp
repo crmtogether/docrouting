@@ -159,6 +159,43 @@ var key = Request.QueryString("Key0");
 var T = new String(Request.QueryString("T")).toLowerCase();
 var entity = T;
 
+var _url=new String(Request.QueryString);
+if ((T=="")||(T+""=="undefined"))
+{
+	if (_url.indexOf("RecentValue=200X")>0)
+	{
+		T="company";
+	}else 
+	if (_url.indexOf("RecentValue=220X")>0)
+	{
+		T="person";
+	}else 
+	if (_url.indexOf("RecentValue=200X")>0)
+	{
+		T="company";
+	}else 
+	if (_url.indexOf("RecentValue=281X")>0)
+	{
+		T="case";
+	}else 
+	if (_url.indexOf("RecentValue=260X")>0)
+	{
+		T="opportunity";
+	}else 
+	if (_url.indexOf("RecentValue=1469X")>0)
+	{
+		T="quote";
+	}else 
+	if (_url.indexOf("RecentValue=1463X")>0)
+	{
+		T="order";
+	}else 
+	if (_url.indexOf("RecentValue=1284X")>0)
+	{
+		T="solutions";
+	}			
+}
+
 switch (T) {
 	case "quote" : 
 		entity = "quotes";
@@ -176,8 +213,6 @@ var tableInfo = CRM.FindRecord("Custom_Tables", "bord_name='" + entity + "'");
 var idField = tableInfo.bord_idfield;
 var prefix = new String(tableInfo.bord_prefix).toLowerCase();
 var record = CRM.FindRecord(entity , idField + "=" + Request.QueryString("Key" + key));
-
-
 
 //get person and company details
 var recordSummary = eWare.FindRecord(entity + ",vSummary" + T, idField + "=" + record.RecordId);
@@ -242,7 +277,7 @@ var sTitle = 'Send Document';
 			EMAIL_TO="No email address found for this person:"+person.pers_firstname+" "+person.pers_lastname;
 		}
 	} else {
-		EMAIL_TO = "crm@leadingedge.ro";
+		EMAIL_TO = "";
 	}
 	
 	
@@ -253,6 +288,10 @@ if (MERGE_SUBJECT  || MERGE_EMAIL_BODY) {
 
 
 	emailDetails = getEmTemplate("Send " + T + " Document");
+	if (emailDetails.eof)
+	{
+	  emailDetails.emte_comm_note='EXPECTED '+'Send' + T + ' Document Email Template';
+	}
 	emailDetails.emte_comm_from = CRM.GetContextInfo("User","user_emailaddress");
 	EMAIL_FROM = emailDetails.emte_comm_from;
 
@@ -285,7 +324,7 @@ i=0;
 
 
 var libraryField = "Libr_"+ T + "Id";
-var libSql = "select * FROM vLibrary  WITH (NOLOCK)  WHERE  " + 
+var libSql = "select top 20 * FROM vLibrary  WITH (NOLOCK)  WHERE  " + 
 	" COALESCE(Libr_Global, N'') <> N'Y' AND  ((COALESCE(Libr_Private, N'') = N'') OR ((COALESCE(Libr_Private, N'') <> N'') " + 
 	" AND (Libr_UserId = " + eWare.GetContextInfo("User", "user_userid")+ ")))";
 libSql += " AND "+libraryField+" =" + record.RecordId + " ORDER BY libr_createddate desc";
