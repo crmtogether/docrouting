@@ -290,7 +290,7 @@ if (MERGE_SUBJECT  || MERGE_EMAIL_BODY) {
 	emailDetails = getEmTemplate("Send " + T + " Document");
 	if (emailDetails.eof)
 	{
-	  emailDetails.emte_comm_note='EXPECTED '+'Send' + T + ' Document Email Template';
+	  emailDetails.emte_comm_note='EXPECTED '+'Send ' + T + ' Document Email Template';
 	}
 	emailDetails.emte_comm_from = CRM.GetContextInfo("User","user_emailaddress");
 	EMAIL_FROM = emailDetails.emte_comm_from;
