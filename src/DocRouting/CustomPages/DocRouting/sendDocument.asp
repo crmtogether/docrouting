@@ -422,7 +422,11 @@ function getEmailForm() {
 	s+='<span class="VIEWBOXCAPTION">User List - Double click to add to the TO list &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
 	s+='<button id="modal-close" onclick="return togglediv(\'userlist\')" >Close</button>'
 	s+='<select style="width:99%;height:96%;" size="20" ondblclick ="addToEmail(this)">';
-	var userql='select User_EmailAddress, User_FirstName, User_LastName from users where user_deleted is null and User_EmailAddress is not null order by User_firstName,User_LastName';
+	var userql='select User_EmailAddress, User_FirstName, User_LastName from users '+
+		'where user_deleted is null and User_EmailAddress is not null '+
+		'and (user_resource is null or  user_resource ='False')'+
+		'and (User_Disabled is null or  User_Disabled ='N')'+
+		'order by User_firstName,User_LastName';
 	var userq=CRM.CreateQueryObj(userql);
 	userq.SelectSQL();
 	
